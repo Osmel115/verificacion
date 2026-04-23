@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificación de Seguridad</title>
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="text-align: center; font-family: sans-serif; background-color: #f4f4f4; padding: 50px 20px;">
+    <h2>🤖 Verificación Anti-Bot</h2>
+    <p>Por favor, resuelve el captcha para continuar.</p>
+    
+    <div style="display: inline-block;">
+        <div class="h-captcha" data-sitekey="10000000-ffff-ffff-ffff-000000000001"></div>
+        <br>
+        <button onclick="verificar()" style="padding: 15px 30px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            CONFIRMAR VERIFICACIÓN
+        </button>
+    </div>
+
+    <script>
+        function verificar() {
+            const hcaptchaVal = hcaptcha.getResponse();
+            if (hcaptchaVal.length === 0) {
+                alert("Por favor, completa el captcha primero.");
+                return;
+            }
+
+            // Obtenemos la URL de tu bot desde el enlace
+            const urlParams = new URLSearchParams(window.location.search);
+            const webhook = urlParams.get('webhookUrl');
+
+            if (webhook) {
+                // Avisamos al bot de BotBusiness
+                fetch(webhook)
+                    .then(() => {
+                        document.body.innerHTML = "<h1>✅ ¡Listo!</h1><p>Ya puedes cerrar esto y volver al bot.</p>";
+                    })
+                    .catch(() => alert("Error al conectar con el bot."));
+            } else {
+                alert("Error: No se encontró la dirección del bot.");
+            }
+        }
+    </script>
+</body>
+  </html>
+
